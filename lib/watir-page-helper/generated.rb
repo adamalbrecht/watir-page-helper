@@ -281,12 +281,15 @@ module WatirPageHelper
       create_element_getter "#{name}_li", identifier, __method__, block
     end
 
-    # Generates two link methods to:
+    # Generates three link methods to:
     # * click a link;
     # * return the link element.
     #
     # @param [Symbol] name The name of the link element (used to generate the methods)
     # @param [optional, Hash] identifier A set of key, value pairs to identify the element
+    # @param [optional, Class] page_class A contstant representing a "Page Class" that
+    # should be instansiated, using @browser as the paramater. This will be returned when
+    # calling the click method
     # @param block
     # @return [Nil]
     #
@@ -294,9 +297,10 @@ module WatirPageHelper
     # link :info, :text => "Information"
     # page.info
     # page.info_link.exist?.should be_true
-    def link name, identifier=nil, &block
+    def link name, identifier=nil, page_class=nil, &block
       define_method(name) do
         self.send("#{name}_link").click
+        page_class.new(@browser) unless page_class.nil?
       end
       create_element_getter "#{name}_link", identifier, __method__, block
     end
@@ -307,6 +311,9 @@ module WatirPageHelper
     #
     # @param [Symbol] name The name of the button element (used to generate the methods)
     # @param [optional, Hash] identifier A set of key, value pairs to identify the element
+    # @param [optional, Class] page_class A contstant representing a "Page Class" that
+    # should be instansiated, using @browser as the paramater. This will be returned when
+    # calling the click method
     # @param block
     # @return [Nil]
     #
@@ -314,9 +321,10 @@ module WatirPageHelper
     # button :info, :text => "Information"
     # page.info
     # page.info_button.exist?.should be_true
-    def button name, identifier=nil, &block
+    def button name, identifier=nil, page_class=nil, &block
       define_method(name) do
         self.send("#{name}_button").click
+        page_class.new(@browser) unless page_class.nil?
       end
       create_element_getter "#{name}_button", identifier, __method__, block
     end
